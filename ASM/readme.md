@@ -12,6 +12,7 @@ Register | ax / bx / cx / dx / si / di / bp / sp / ip / cs / ds / es / ss | 寄�
 Number | 1234 / 1234H | 10 进制 / 16 进制数字
 Label | label: / label | 标签, 指向一行指令
 MemorySeek | [bx+offset].addition | 指向一个内存地址
+String | 'string' | 使用单引号包围的一段字符串
 
 ## 内存操作
 `memory_address := ds * 16 + bx + offset`
@@ -97,7 +98,7 @@ String | 37 | -
 ```asm
 call System.Console.Clear
 
-push 'ax value is `
+push 'ax value is '
 call System.Console.Write(System.String)
 
 mov ax, 5050
