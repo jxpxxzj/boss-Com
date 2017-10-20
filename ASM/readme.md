@@ -2,7 +2,8 @@
 boss-asm 语言基本说明.
 
 ## 语法
-基本接近于 8086 asm, 参考程序见 ../TestProgs.
+基本接近于 8086 asm, 参考程序见 ../TestProgs.  
+支持单行注释, 使用 `//` 起始
 
 ## 基本类型
 类型 | 格式 | 备注 
@@ -93,7 +94,7 @@ op1 类型 |  指令周期 | 备注
 String | 37 | -
 
 示例:
-```
+```asm
 call System.Console.Clear
 
 push 'ax value is `
