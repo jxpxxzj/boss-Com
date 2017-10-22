@@ -18,6 +18,8 @@ namespace OSExp.ASM.Emulator
 
         public Stack<object> Stack { get; protected set; } = new Stack<object>();
 
+        public Stack<int> ProcStackTrace { get; protected set; } = new Stack<int>();
+
         public List<SyntaxNode> Program { get; protected set; }
 
         public event EventHandler<InterruptEventArgs> Interrupted;
@@ -46,6 +48,7 @@ namespace OSExp.ASM.Emulator
                 TimeUse = value.TimeUse;
                 Memory = value.Memory;
                 Stack = value.Stack;
+                ProcStackTrace = value.ProcStackTrace;
             }
         }
 
@@ -105,8 +108,7 @@ namespace OSExp.ASM.Emulator
                         }
                         if (op1.Type == NodeType.MemorySeek && op2.Type == NodeType.Register)
                         {
-                            Mov((MemorySeek)op1.Value, (Register)op2.Value);
-                            
+                            Mov((MemorySeek)op1.Value, (Register)op2.Value);                         
                         }
                         if (op1.Type == NodeType.Register && op2.Type == NodeType.Number)
                         {
@@ -176,6 +178,92 @@ namespace OSExp.ASM.Emulator
                         Dec((Register)op1.Value);
                         break;
 
+                    case Ops.And:
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.Register)
+                        {
+                            And((Register)op1.Value, (Register)op2.Value);
+                        }
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.MemorySeek)
+                        {
+                            And((Register)op1.Value, (MemorySeek)op2.Value);
+                        }
+                        if (op1.Type == NodeType.MemorySeek && op2.Type == NodeType.Register)
+                        {
+                            And((MemorySeek)op1.Value, (Register)op2.Value);
+                        }
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.Number)
+                        {
+                            And((Register)op1.Value, (int)op2.Value);
+                        }
+                        if (op1.Type == NodeType.MemorySeek && op2.Type == NodeType.Number)
+                        {
+                            And((MemorySeek)op1.Value, (int)op2.Value);
+                        }
+                        break;
+                    case Ops.Or:
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.Register)
+                        {
+                            Or((Register)op1.Value, (Register)op2.Value);
+                        }
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.MemorySeek)
+                        {
+                            Or((Register)op1.Value, (MemorySeek)op2.Value);
+                        }
+                        if (op1.Type == NodeType.MemorySeek && op2.Type == NodeType.Register)
+                        {
+                            Or((MemorySeek)op1.Value, (Register)op2.Value);
+                        }
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.Number)
+                        {
+                            Or((Register)op1.Value, (int)op2.Value);
+                        }
+                        if (op1.Type == NodeType.MemorySeek && op2.Type == NodeType.Number)
+                        {
+                            Or((MemorySeek)op1.Value, (int)op2.Value);
+                        }
+                        break;
+                    case Ops.Not:
+                        if (op1.Type == NodeType.Register)
+                        {
+                            Not((Register)op1.Value);
+                        }
+                        if (op1.Type == NodeType.MemorySeek)
+                        {
+                            Not((MemorySeek)op1.Value);
+                        }
+                        break;
+                    case Ops.Xor:
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.Register)
+                        {
+                            Xor((Register)op1.Value, (Register)op2.Value);
+                        }
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.MemorySeek)
+                        {
+                            Xor((Register)op1.Value, (MemorySeek)op2.Value);
+                        }
+                        if (op1.Type == NodeType.MemorySeek && op2.Type == NodeType.Register)
+                        {
+                            Xor((MemorySeek)op1.Value, (Register)op2.Value);
+                        }
+                        if (op1.Type == NodeType.Register && op2.Type == NodeType.Number)
+                        {
+                            Xor((Register)op1.Value, (int)op2.Value);
+                        }
+                        if (op1.Type == NodeType.MemorySeek && op2.Type == NodeType.Number)
+                        {
+                            Xor((MemorySeek)op1.Value, (int)op2.Value);
+                        }
+                        break;
+
+                    case Ops.Shl:
+                        break;
+                    case Ops.Shr:
+                        break;
+                    case Ops.Rol:
+                        break;
+                    case Ops.Ror:
+                        break;
+
                     case Ops.Push:
                         if (op1.Type == NodeType.Register)
                         {
@@ -192,7 +280,10 @@ namespace OSExp.ASM.Emulator
 
                     case Ops.Call:
                         Call((string)op1.Value);
-                        break;          
+                        break;
+                    case Ops.Ret:
+                        Ret();
+                        break;
                     case Ops.Loop:
                         Loop((string)op1.Value);
                         break;
@@ -368,9 +459,132 @@ namespace OSExp.ASM.Emulator
             TimeUse += 168;
         }
 
+        public void And(Register target, Register source)
+        {
+            var t = getRegister(target);
+            var s = getRegister(source);
+            setRegister(target, t & s);
+            TimeUse += 3;
+        }
+
+        public void And(MemorySeek target, Register source)
+        {
+            var t = getMemory(target);
+            var s = getRegister(source);
+            setMemory(target, t & s);
+            TimeUse += 16;
+        }
+        public void And(Register target, MemorySeek source)
+        {
+            var t = getRegister(target);
+            var s = getMemory(source);
+            setRegister(target, t & s);
+            TimeUse += 9;
+        }
+
+        public void And(Register target, int number)
+        {
+            var t = getRegister(target);
+            setRegister(target, t & number);
+            TimeUse += 4;
+        }
+
+        public void And(MemorySeek target, int number)
+        {
+            var t = getMemory(target);
+            setMemory(target, t & number);
+            TimeUse += 17;
+        }
+
+        public void Or(Register target, Register source)
+        {
+            var t = getRegister(target);
+            var s = getRegister(source);
+            setRegister(target, t | s);
+            TimeUse += 3;
+        }
+
+        public void Or(MemorySeek target, Register source)
+        {
+            var t = getMemory(target);
+            var s = getRegister(source);
+            setMemory(target, t | s);
+            TimeUse += 16;
+        }
+        public void Or(Register target, MemorySeek source)
+        {
+            var t = getRegister(target);
+            var s = getMemory(source);
+            setRegister(target, t | s);
+            TimeUse += 9;
+        }
+
+        public void Or(Register target, int number)
+        {
+            var t = getRegister(target);
+            setRegister(target, t | number);
+            TimeUse += 4;
+        }
+
+        public void Or(MemorySeek target, int number)
+        {
+            var t = getMemory(target);
+            setMemory(target, t | number);
+            TimeUse += 17;
+        }
+
+        public void Not(Register target)
+        {
+            var t = getRegister(target);
+            setRegister(target, ~t);
+        }
+
+        public void Not(MemorySeek target)
+        {
+            var t = getMemory(target);
+            setMemory(target, ~t);
+        }
+
+        public void Xor(Register target, Register source)
+        {
+            var t = getRegister(target);
+            var s = getRegister(source);
+            setRegister(target, t ^ s);
+            TimeUse += 3;
+        }
+
+        public void Xor(MemorySeek target, Register source)
+        {
+            var t = getMemory(target);
+            var s = getRegister(source);
+            setMemory(target, t ^ s);
+            TimeUse += 16;
+        }
+        public void Xor(Register target, MemorySeek source)
+        {
+            var t = getRegister(target);
+            var s = getMemory(source);
+            setRegister(target, t ^ s);
+            TimeUse += 9;
+        }
+
+        public void Xor(Register target, int number)
+        {
+            var t = getRegister(target);
+            setRegister(target, t ^ number);
+            TimeUse += 4;
+        }
+
+        public void Xor(MemorySeek target, int number)
+        {
+            var t = getMemory(target);
+            setMemory(target, t ^ number);
+            TimeUse += 17;
+        }
+
         public void Call(string name)
         {
-            if(name.Contains("."))
+            if(name.Contains(".")) // invoke clr methods
             {
                 var result = invokeCLRMethod(name);
                 if (result != null)
@@ -378,8 +592,26 @@ namespace OSExp.ASM.Emulator
                     Push(result);
                 }
             }
+            else // call proc
+            {
+                ProcStackTrace.Push(RegisterFrame.ip);
+                var line = Program.FindIndex(t => t.Label == name);
+                registerFrame.ip = line - 1;
+            }
             TimeUse += 37;
-            
+        }
+
+        public void Ret()
+        {
+            if (ProcStackTrace.Count == 0) // terminate program
+            {
+                registerFrame.ip = Program.Count - 1;
+            }
+            else // return from proc
+            {
+                var line = ProcStackTrace.Pop();
+                registerFrame.ip = line - 1;
+            }
         }
 
         public void Int(int num)

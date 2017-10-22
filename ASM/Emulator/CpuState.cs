@@ -8,6 +8,7 @@ namespace OSExp.ASM.Emulator
         public FlagRegisterFrame FlagRegisterFrame;
         public int[] Memory;
         public Stack<object> Stack;
+        public Stack<int> ProcStackTrace;
         public int TimeUse;
 
         public CpuState(int memorySize = 1048576)
@@ -16,6 +17,7 @@ namespace OSExp.ASM.Emulator
             FlagRegisterFrame = new FlagRegisterFrame();
             Memory = new int[memorySize];
             Stack = new Stack<object>();
+            ProcStackTrace = new Stack<int>();
             TimeUse = 0;
         }
 
@@ -26,6 +28,7 @@ namespace OSExp.ASM.Emulator
             TimeUse = cpu.TimeUse;
             Stack = cpu.Stack;
             Memory = cpu.Memory;
+            ProcStackTrace = cpu.ProcStackTrace;
         }
     }
 }
