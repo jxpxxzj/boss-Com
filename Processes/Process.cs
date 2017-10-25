@@ -27,7 +27,7 @@ namespace OSExp.Processes
 
         public override string ToString()
         {
-            return $"Process: {Name} RequestTime: {RequestTime} Priority: {Priority} State: {State} CreateTime: {CreateTime} CpuTime: {CpuState.TimeUse}";
+            return $"Process: {Name} CommandCount: {Program.Count} Priority: {Priority} State: {State} CreateTime: {CreateTime} LastRunTime: {LastRunTime} CpuTime: {CpuState.TimeUse}";
         }
     }
 }

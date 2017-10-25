@@ -10,7 +10,7 @@ namespace OSExp.Simulator
             var before = process.CpuState.TimeUse;
             var after = Cpu.State.TimeUse;
 
-            while(after - before < TimeSliceUnit)
+            while (after - before < TimeSliceUnit)
             {
                 Cpu.RunStep();
                 after = Cpu.State.TimeUse;
@@ -18,18 +18,6 @@ namespace OSExp.Simulator
                 {
                     break;
                 }
-            }
-
-            if (Cpu.IsTerminated)
-            {
-                // process.RequestTime = 0;
-                // return process.RequestTime;
-            }
-            else
-            {
-                // process.RequestTime -= TimeSliceUnit;
-                // process.Priority--;
-                // return TimeSliceUnit;
             }
             return after - before;
         }

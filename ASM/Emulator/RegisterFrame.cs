@@ -6,14 +6,14 @@
         public int bx;
         public int cx;
         public int dx;
-               
+
         public int si;
         public int di;
         public int bp;
         public int sp;
-               
+
         public int ip;
-               
+
         public int cs;
         public int ds;
         public int es;

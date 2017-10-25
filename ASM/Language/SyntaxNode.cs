@@ -20,7 +20,7 @@ namespace OSExp.ASM.Language
             get => inner_value;
             set
             {
-                if(Type == NodeType.Register)
+                if (Type == NodeType.Register)
                 {
                     inner_value = Enum.Parse(typeof(Register), value.ToString());
                 }
@@ -42,7 +42,7 @@ namespace OSExp.ASM.Language
                         var add = jobject["Addition"].Value<int>();
                         inner_value = new MemorySeek(reg, off, add);
                     }
-                    
+
                 }
                 else if (Type == NodeType.Number)
                 {

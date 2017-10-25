@@ -9,9 +9,9 @@ namespace OSExp.Simulator
         public static int TotalTaskCount { get; private set; } = 0;
         public static (string, List<SyntaxNode>) GenerateTask()
         {
-            var rand = new Random(DateTime.Now.Millisecond).Next(50)+50;
+            var rand = new Random(DateTime.Now.Millisecond).Next(50) + 50;
             var prog = new List<SyntaxNode>();
-            for(var i=0;i<rand;i++)
+            for (var i = 0; i < rand; i++)
             {
                 prog.Add(new SyntaxNode()
                 {
@@ -19,7 +19,7 @@ namespace OSExp.Simulator
                     Value = Ops.Nop
                 });
             }
-            
+
             return ($"Process {++TotalTaskCount}", prog);
         }
     }

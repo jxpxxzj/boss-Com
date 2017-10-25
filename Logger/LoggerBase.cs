@@ -10,7 +10,7 @@ namespace OSExp.Logger
             Type = type;
         }
         protected abstract void WriteLog(LogLevel level, string msg);
-        
+
         protected void Log(LogLevel level, string msg)
         {
             if (LogManager.Level <= level)
@@ -35,11 +35,11 @@ namespace OSExp.Logger
         {
             Log(LogLevel.Warn, msg);
         }
-        
+
         public virtual string Format(LogLevel level, string msg)
         {
             return $"[{level}] ({Type.FullName}) {DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()} - {msg}";
         }
-        
+
     }
 }

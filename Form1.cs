@@ -67,7 +67,7 @@ namespace OSExp
         private void refreshList()
         {
             listView1.Items.Clear();
-            foreach(var p in system.GetAllProcess())
+            foreach (var p in system.GetAllProcess())
             {
                 var item = new ListViewItem(p.Name);
                 item.SubItems.Add(p.Priority.ToString());
@@ -93,10 +93,6 @@ namespace OSExp
             var prog = Parser.Parse(textBox1.Text);
             system.CreateProcess($"Writable program {++writable_cnt}", prog, Priority.Normal);
             refreshList();
-            //var cpu = new Cpu();
-            //cpu.Interrupted += Cpu_Interrupted;
-            //cpu.LoadProgram(prog);
-            //cpu.RunToEnd();
         }
 
         private void Cpu_Interrupted(object sender, InterruptEventArgs e)
@@ -109,9 +105,10 @@ namespace OSExp
 
         private void printByteToScreen(byte[] array)
         {
-            for(var i=0;i<array.Length;i++)
+            for (var i = 0; i < array.Length; i++)
             {
-                if (i % 8 == 0 ) {
+                if (i % 8 == 0)
+                {
                     Console.WriteLine();
                 }
                 Console.Write(array[i].ToString("X").PadLeft(2, '0') + "  ");

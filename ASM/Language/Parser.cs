@@ -35,7 +35,7 @@ namespace OSExp.ASM.Language
                 node.Type = NodeType.Label;
                 node.Label = tr.Substring(0, tr.Length - 1);
                 return node;
-            }       
+            }
             var findLab = tr.Split(':').ToList();
             if (findLab.Count() == 2) // find label
             {
@@ -43,7 +43,7 @@ namespace OSExp.ASM.Language
                 findLab.RemoveAt(0);
             }
 
-            
+
             if (findLab.Count() == 1)  // no label found
             {
                 var findOps = findLab[0].Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -109,7 +109,7 @@ namespace OSExp.ASM.Language
                         }
 
                         // label
-                        if ((Ops)node.Value == Ops.Loop || (Ops)node.Value == Ops.Call  || (Ops)node.Value == Ops.Mov)
+                        if ((Ops)node.Value == Ops.Loop || (Ops)node.Value == Ops.Call || (Ops)node.Value == Ops.Mov)
                         {
                             var labNode = new SyntaxNode()
                             {

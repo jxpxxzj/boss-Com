@@ -128,7 +128,7 @@ namespace OSExp.Simulator
             {
                 ScheduleProcess();
             }
-            
+
             result = ProcessList.Where(p => p.State == State.Ready).FirstOrDefault();
             return result;
         }
@@ -146,7 +146,7 @@ namespace OSExp.Simulator
             }
             // recover 
             Cpu.LoadProgram(process.Program, process.CpuState);
-            
+
 
             var stateBefore = process.State;
             process.State = State.Running;

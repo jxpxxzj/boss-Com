@@ -9,7 +9,6 @@ namespace OSExp.Simulator
             var before = process.CpuState.TimeUse;
             Cpu.RunStep();
             var after = Cpu.State.TimeUse;
-            // process.RequestTime--;
             if (process.Priority != Priority.RealTime && process.Priority > Priority.Low)
             {
                 process.Priority--;
