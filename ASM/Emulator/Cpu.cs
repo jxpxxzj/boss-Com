@@ -39,7 +39,7 @@ namespace OSExp.ASM.Emulator
 
         }
 
-        public Cpu(List<SyntaxNode> program, CpuState state = new CpuState(1048576))
+        public Cpu(List<SyntaxNode> program, CpuState state = new CpuState())
         {
             LoadProgram(program, state);
         }

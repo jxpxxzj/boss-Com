@@ -135,14 +135,14 @@ namespace OSExp.Simulator
 
         protected abstract int RunProcess(Process process);
 
-        public void Run()
+        public IEnumerable<int> Run()
         {
             SortList();
             var process = GetRunnableProcess();
 
             if (process == null)
             {
-                return;
+                yield break;
             }
             // recover 
             Cpu.LoadProgram(process.Program, process.CpuState);
@@ -151,7 +151,12 @@ namespace OSExp.Simulator
             var stateBefore = process.State;
             process.State = State.Running;
 
+            yield return 0;
+
             var timeCost = RunProcess(process);
+
+            yield return 1;
+
             process.LastRunTime = Time;
             Time += timeCost;
             process.State = State.Ready;
@@ -165,6 +170,8 @@ namespace OSExp.Simulator
             // save state
             process.CpuState = Cpu.State;
             SortList();
+
+            yield return 2;
         }
 
         public void SuspendProcess(string processName)

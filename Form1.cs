@@ -22,6 +22,7 @@ namespace OSExp
             system.ProcessRunned += System_ProcessRunned;
             system.ProcessKilled += System_ProcessKilled;
             system.Interrupted += Cpu_Interrupted;
+            stateMachine = system.Run().GetEnumerator();
         }
 
         private void System_ProcessKilled(object sender, ProcessEventArgs e)
@@ -39,9 +40,16 @@ namespace OSExp
             logger.Info($"{e.Process.Name} created, timeRequest:{e.Process.RequestTime}.");
         }
 
+        IEnumerator<int> stateMachine;
         private void button1_Click(object sender, EventArgs e)
         {
-            system.Run();
+            // move to next state
+            stateMachine.MoveNext();
+            if (stateMachine.Current == 2)
+            {
+                // reset state machine
+                stateMachine = system.Run().GetEnumerator();
+            }
             refreshList();
         }
 
