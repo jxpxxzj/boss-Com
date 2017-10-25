@@ -1,6 +1,7 @@
 ﻿using OSExp.ASM.Emulator;
 using OSExp.ASM.Language;
 using OSExp.Logger;
+using OSExp.Processes;
 using OSExp.Simulator;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace OSExp
             system.ProcessCreated += System_ProcessCreated;
             system.ProcessRunned += System_ProcessRunned;
             system.ProcessKilled += System_ProcessKilled;
+            system.Interrupted += Cpu_Interrupted;
         }
 
         private void System_ProcessKilled(object sender, ProcessEventArgs e)
@@ -61,7 +63,7 @@ namespace OSExp
             {
                 var item = new ListViewItem(p.Name);
                 item.SubItems.Add(p.Priority.ToString());
-                item.SubItems.Add(p.RequestTime.ToString());
+                item.SubItems.Add(p.LastRunTime.ToString());
                 item.SubItems.Add(p.State.ToString());
                 listView1.Items.Add(item);
             }
@@ -76,13 +78,17 @@ namespace OSExp
         {
             return Compiler.Decompile(File.ReadAllBytes(fileName));
         }
+
+        int writable_cnt = 0;
         private void button3_Click(object sender, EventArgs e)
         {
             var prog = Parser.Parse(textBox1.Text);
-            var cpu = new Cpu();
-            cpu.Interrupted += Cpu_Interrupted;
-            cpu.LoadProgram(prog);
-            cpu.RunToEnd();
+            system.CreateProcess($"Writable program {++writable_cnt}", prog, Priority.Normal);
+            refreshList();
+            //var cpu = new Cpu();
+            //cpu.Interrupted += Cpu_Interrupted;
+            //cpu.LoadProgram(prog);
+            //cpu.RunToEnd();
         }
 
         private void Cpu_Interrupted(object sender, InterruptEventArgs e)

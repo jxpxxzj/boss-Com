@@ -1,4 +1,7 @@
-﻿using OSExp.Simulator;
+﻿using OSExp.ASM.Emulator;
+using OSExp.ASM.Language;
+using OSExp.Simulator;
+using System.Collections.Generic;
 
 namespace OSExp.Processes
 {
@@ -10,7 +13,12 @@ namespace OSExp.Processes
         public State State { get; set; }
 
         public int CreateTime { get; set; }
-        public int CpuTime { get; set; }
+
+        public int LastRunTime { get; set; }
+
+        public List<SyntaxNode> Program { get; set; }
+
+        public CpuState CpuState { get; set; }
 
         public ProcessEventArgs ToEventArgs() => new ProcessEventArgs()
         {
@@ -19,7 +27,7 @@ namespace OSExp.Processes
 
         public override string ToString()
         {
-            return $"Process: {Name} RequestTime: {RequestTime} Priority: {Priority} State: {State} CreateTime: {CreateTime} CpuTime: {CpuTime}";
+            return $"Process: {Name} RequestTime: {RequestTime} Priority: {Priority} State: {State} CreateTime: {CreateTime} CpuTime: {CpuState.TimeUse}";
         }
     }
 }

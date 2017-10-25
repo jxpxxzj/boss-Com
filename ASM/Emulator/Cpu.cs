@@ -1,4 +1,5 @@
 ﻿using OSExp.ASM.Language;
+using OSExp.Logger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,18 +24,22 @@ namespace OSExp.ASM.Emulator
         public List<SyntaxNode> Program { get; protected set; }
 
         public event EventHandler<InterruptEventArgs> Interrupted;
-        
+
 
         public int[] Memory { get; protected set; } = new int[1048576];
 
+        ILogger logger = LogManager.GetLogger(typeof(Cpu));
+
         public SyntaxNode CurrentLine => Program[registerFrame.ip];
+
+        public bool IsTerminated => RegisterFrame.ip == Program.Count;
 
         public Cpu()
         {
 
         }
 
-        public Cpu(List<SyntaxNode> program, CpuState state = new CpuState())
+        public Cpu(List<SyntaxNode> program, CpuState state = new CpuState(1048576))
         {
             LoadProgram(program, state);
         }
@@ -42,7 +47,8 @@ namespace OSExp.ASM.Emulator
         public CpuState State
         {
             get => new CpuState(this);
-            set {
+            set
+            {
                 registerFrame = value.RegisterFrame;
                 flagRegisterFrame = value.FlagRegisterFrame;
                 TimeUse = value.TimeUse;
@@ -73,6 +79,7 @@ namespace OSExp.ASM.Emulator
         }
         public void RunStep()
         {
+            logger.Info($"Run line: {CurrentLine}");
             if (RegisterFrame.ip < Program.Count)
             {
                 runLine(CurrentLine);
@@ -82,7 +89,7 @@ namespace OSExp.ASM.Emulator
 
         public void RunToEnd()
         {
-            while(RegisterFrame.ip < Program.Count)
+            while (RegisterFrame.ip < Program.Count)
             {
                 RunStep();
             }
@@ -93,9 +100,9 @@ namespace OSExp.ASM.Emulator
             if (code.Type == NodeType.Operation)
             {
                 var ops = (Ops)code.Value;
-                var op1 = code.Children[0];
-                var op2 = code.Children.Count == 2 ? code.Children[1]: null;
-                switch(ops)
+                var op1 = code.Children.Count >= 1 ? code.Children[0] : null;
+                var op2 = code.Children.Count == 2 ? code.Children[1] : null;
+                switch (ops)
                 {
                     case Ops.Mov:
                         if (op1.Type == NodeType.Register && op2.Type == NodeType.Register)
@@ -108,7 +115,7 @@ namespace OSExp.ASM.Emulator
                         }
                         if (op1.Type == NodeType.MemorySeek && op2.Type == NodeType.Register)
                         {
-                            Mov((MemorySeek)op1.Value, (Register)op2.Value);                         
+                            Mov((MemorySeek)op1.Value, (Register)op2.Value);
                         }
                         if (op1.Type == NodeType.Register && op2.Type == NodeType.Number)
                         {
@@ -272,7 +279,7 @@ namespace OSExp.ASM.Emulator
                         else
                         {
                             Push(op1.Value);
-                        } 
+                        }
                         break;
                     case Ops.Pop:
                         Pop((Register)op1.Value);
@@ -330,7 +337,7 @@ namespace OSExp.ASM.Emulator
                     case Ops.Nop:
                         Nop();
                         break;
-                   
+
                 }
             }
         }
@@ -441,7 +448,7 @@ namespace OSExp.ASM.Emulator
             setRegister(Register.dx, o % s);
             TimeUse += 162;
         }
-    
+
         public void Div(int value)
         {
             var o = getRegister(Register.ax);
@@ -584,7 +591,7 @@ namespace OSExp.ASM.Emulator
 
         public void Call(string name)
         {
-            if(name.Contains(".")) // invoke clr methods
+            if (name.Contains(".")) // invoke clr methods
             {
                 var result = invokeCLRMethod(name);
                 if (result != null)
@@ -634,7 +641,7 @@ namespace OSExp.ASM.Emulator
         public void Jmp(string label)
         {
             var line = Program.FindIndex(t => t.Label == label);
-            registerFrame.ip = line-1;
+            registerFrame.ip = line - 1;
             TimeUse += 15;
         }
 
@@ -718,7 +725,7 @@ namespace OSExp.ASM.Emulator
             }
             TimeUse += 2;
         }
-        
+
         public void Pop(Register register)
         {
             setRegister(register, pop<int>());
@@ -806,8 +813,8 @@ namespace OSExp.ASM.Emulator
                     typeList.Add(asm.GetType(t.Trim()));
                 }
             }
-            
-            var clsName = string.Join(".", sp.ToArray());  
+
+            var clsName = string.Join(".", sp.ToArray());
             var cls = asm.GetType(clsName.Split('(')[0]);
             if (cls != null)
             {

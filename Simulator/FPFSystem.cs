@@ -1,5 +1,4 @@
-﻿using System;
-using OSExp.Processes;
+﻿using OSExp.Processes;
 
 namespace OSExp.Simulator
 {
@@ -7,12 +6,15 @@ namespace OSExp.Simulator
     {
         protected override int RunProcess(Process process)
         {
-            process.RequestTime--;
+            var before = process.CpuState.TimeUse;
+            Cpu.RunStep();
+            var after = Cpu.State.TimeUse;
+            // process.RequestTime--;
             if (process.Priority != Priority.RealTime && process.Priority > Priority.Low)
             {
                 process.Priority--;
             }
-            return 1;
+            return after - before;
         }
     }
 }

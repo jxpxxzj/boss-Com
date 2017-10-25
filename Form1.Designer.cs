@@ -85,7 +85,7 @@
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Request Time";
+            this.columnHeader3.Text = "Last Run Time";
             this.columnHeader3.Width = 234;
             // 
             // columnHeader4

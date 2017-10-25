@@ -1,4 +1,6 @@
-﻿using OSExp.Processes;
+﻿using OSExp.ASM.Emulator;
+using OSExp.ASM.Language;
+using OSExp.Processes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,20 @@ namespace OSExp.Simulator
         public event EventHandler<ProcessEventArgs> ProcessSuspended;
         public event EventHandler<ProcessEventArgs> ProcessUnsuspended;
         public event EventHandler<ProcessEventArgs> ProcessKilled;
+
+        public event EventHandler<InterruptEventArgs> Interrupted;
+
+        public System()
+        {
+            Cpu.Interrupted += Cpu_Interrupted;
+        }
+
+        private void Cpu_Interrupted(object sender, InterruptEventArgs e)
+        {
+            Interrupted?.Invoke(sender, e);
+        }
+
+        public Cpu Cpu { get; protected set; } = new Cpu();
 
         protected void OnProcessStateChange(Process process, State before)
         {
@@ -99,7 +115,7 @@ namespace OSExp.Simulator
             rList.Sort((p1, p2) =>
             {
                 if (p1.Priority == p2.Priority)
-                    return 0;
+                    return p1.LastRunTime > p2.LastRunTime ? 1 : -1;
                 return p1.Priority < p2.Priority ? 1 : -1;
             });
             ProcessList = rList.Concat(tList).ToList();
@@ -123,24 +139,31 @@ namespace OSExp.Simulator
         {
             SortList();
             var process = GetRunnableProcess();
+
             if (process == null)
             {
                 return;
             }
+            // recover 
+            Cpu.LoadProgram(process.Program, process.CpuState);
+            
+
             var stateBefore = process.State;
             process.State = State.Running;
 
             var timeCost = RunProcess(process);
-
-            process.CpuTime += timeCost;
+            process.LastRunTime = Time;
             Time += timeCost;
             process.State = State.Ready;
-            if (process.RequestTime == 0)
+            if (Cpu.IsTerminated)
             {
                 process.State = State.Terminated;
                 OnProcessStateChange(process, stateBefore);
             }
             OnProcessRun(process);
+
+            // save state
+            process.CpuState = Cpu.State;
             SortList();
         }
 
@@ -215,14 +238,14 @@ namespace OSExp.Simulator
 
         private void addNewTask()
         {
-            var (name, time) = TaskPool.GenerateTask();
-            CreateProcess(name, time);
+            var (name, prog) = TaskPool.GenerateTask();
+            CreateProcess(name, prog);
         }
         public void CreateProcess()
         {
             addNewTask();
         }
-        public void CreateProcess(string processName, int requestTime, Priority priority = Priority.Normal)
+        public void CreateProcess(string processName, List<SyntaxNode> program, Priority priority = Priority.Normal)
         {
             CheckChannel();
             var findInProcess = ProcessList.Find(t => t.Name == processName);
@@ -232,9 +255,10 @@ namespace OSExp.Simulator
                 var process = new Process()
                 {
                     Name = processName,
-                    RequestTime = requestTime,
+                    Program = program,
                     Priority = priority,
                     State = State.Created,
+                    CpuState = new CpuState(1048576),
                     CreateTime = Time
                 };
                 ProcessList.Add(process);
