@@ -29,6 +29,8 @@ namespace OSExp.Simulator
 
         public event EventHandler<InterruptEventArgs> Interrupted;
 
+        public bool CanRun => ProcessList.Where(p => p.State == State.Ready || p.State == State.Running || p.State == State.Created).FirstOrDefault() != null;
+
         public System()
         {
             Cpu.Interrupted += Cpu_Interrupted;
@@ -147,15 +149,12 @@ namespace OSExp.Simulator
             // recover 
             Cpu.LoadProgram(process.Program, process.CpuState);
 
-
             var stateBefore = process.State;
             process.State = State.Running;
 
-            yield return 0;
-
             var timeCost = RunProcess(process);
 
-            yield return 1;
+            yield return 0;
 
             process.LastRunTime = Time;
             Time += timeCost;
@@ -171,7 +170,7 @@ namespace OSExp.Simulator
             process.CpuState = Cpu.State;
             SortList();
 
-            yield return 2;
+            yield return 1;
         }
 
         public void SuspendProcess(string processName)
@@ -193,13 +192,13 @@ namespace OSExp.Simulator
                 };
             }
         }
-        public void UnsuspendProcess(string processName)
+        public void ResumeProcess(string processName)
         {
             var find = SuspendedList.Find(t => t.Name == processName);
             if (find != null)
             {
                 SuspendedList.Remove(find);
-                find.State = State.Waiting;
+                find.State = State.Ready;
                 ProcessList.Add(find);
                 OnProcessStateChange(find, State.Suspended);
             }
@@ -243,15 +242,6 @@ namespace OSExp.Simulator
             }
         }
 
-        private void addNewTask()
-        {
-            var (name, prog) = TaskPool.GenerateTask();
-            CreateProcess(name, prog);
-        }
-        public void CreateProcess()
-        {
-            addNewTask();
-        }
         public void CreateProcess(string processName, List<SyntaxNode> program, Priority priority = Priority.Normal)
         {
             CheckChannel();
@@ -285,12 +275,20 @@ namespace OSExp.Simulator
         {
             if (ProcessCount == ChannelCount)
             {
-                ProcessList.FindAll(t => t.State == State.Terminated).ForEach(t => KillProcess(t.Name));
+                KillTerminated();
             }
             if (ProcessCount == ChannelCount)
             {
                 throw new TooManyProcessesException();
             }
+        }
+
+        public void KillTerminated()
+        {
+            ProcessList.FindAll(t => t.State == State.Terminated).ForEach((t) =>
+            {
+                KillProcess(t.Name);
+            });
         }
 
         public void KillProcess(string processName)

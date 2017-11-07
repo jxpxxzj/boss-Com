@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddProcessDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddProcessDialog.Designer.cs">
+      <DependentUpon>AddProcessDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ASM\Language\Compiler.cs" />
     <Compile Include="ASM\Emulator\CpuState.cs" />
     <Compile Include="ASM\Emulator\FlagRegisterFrame.cs" />
@@ -71,6 +77,9 @@
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListViewDB.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="Logger\LoggerBase.cs" />
@@ -91,8 +100,10 @@
     <Compile Include="ASM\Emulator\RegisterFrame.cs" />
     <Compile Include="Simulator\RRSystem.cs" />
     <Compile Include="Simulator\System.cs" />
-    <Compile Include="Simulator\TaskPool.cs" />
     <Compile Include="Simulator\TooManyProcessesException.cs" />
+    <EmbeddedResource Include="AddProcessDialog.resx">
+      <DependentUpon>AddProcessDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -106,6 +117,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="ASM\readme.md" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -116,6 +128,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="readme.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
