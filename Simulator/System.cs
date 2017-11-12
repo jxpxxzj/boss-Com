@@ -15,6 +15,8 @@ namespace OSExp.Simulator
         public int Time { get; protected set; } = 0;
 
         public virtual int ChannelCount { get; set; } = 16;
+        public int MaxMemory { get; set; } = 2048;
+
         public int ProcessCount => ProcessList.Count + SuspendedList.Count;
         public List<Process> GetAllProcess() => new List<Process>(ProcessList.Concat(SuspendedList));
 
@@ -260,6 +262,7 @@ namespace OSExp.Simulator
                 };
                 ProcessList.Add(process);
                 SortList();
+                AllocateMemory(process.Name);
                 OnProcessCreate(process);
             }
             else
@@ -317,5 +320,72 @@ namespace OSExp.Simulator
                 OnProcessKilled(find);
             }
         }
+
+
+
+        public void AllocateMemory(string processName)
+        {
+            var process = ProcessList.Find(t => t.Name == processName);
+            if (process == null) process = SuspendedList.Find(t => t.Name == processName);
+            if (process == null) throw new ProcessNotExistException();
+
+            var processSize = process.MemorySize;
+            var hole = FindHole(processSize);
+
+            process.Memory = new MemoryAllocation(hole.Item1, hole.Item2, MemoryAllocationType.Process);
+        }
+
+        public void CompressMemory()
+        {
+            var posPointer = 0;
+            var processAllocated = GetAllProcess().Where(t => t.Memory != null).Select(t => t.Memory).ToList().OrderBy(t => t.Begin);
+            foreach (var p in processAllocated)
+            {
+                if (p.Begin > posPointer) // should move
+                {
+                    p.Move(posPointer - p.Begin, MaxMemory);
+                }
+                if (p.Begin == posPointer)
+                {
+                    posPointer = p.End + 1;
+                }
+            }
+        }
+
+        protected virtual (int, int) FindHole(int expectedSize)
+        {
+            var posPointer = 0;
+            var processAllocated = GetAllProcess().Where(t => t.Memory != null).Select(t => t.Memory).ToList().OrderBy(t => t.Begin);
+            foreach (var p in processAllocated)
+            {
+                if (posPointer < p.Begin) // there is empty space
+                {
+                    var size = p.Begin - posPointer;
+                    if (size >= expectedSize) // can allocate
+                    {
+                        return (posPointer, posPointer + expectedSize - 1);
+                    }
+                    else
+                    {
+                        posPointer = p.End;
+                    }
+                }
+
+                if (posPointer == p.Begin) // such as 0 -> 0
+                {
+                    posPointer += p.Length;
+                }
+            }
+
+            // all process are travelled
+            if (posPointer < MaxMemory && posPointer + expectedSize < MaxMemory) // allocate at the end
+            {
+                return (posPointer, posPointer + expectedSize - 1);
+            }
+
+            // not enough memory to allocate
+            throw new OutOfMemoryException();
+        }
+
     }
 }

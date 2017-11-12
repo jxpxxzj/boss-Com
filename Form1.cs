@@ -4,6 +4,7 @@ using OSExp.Processes;
 using OSExp.Simulator;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace OSExp
@@ -16,6 +17,7 @@ namespace OSExp
         {
             InitializeComponent();
             comboBox1.SelectedItem = "Round-Robin";
+            DoubleBuffered = true;
             button4_Click(this, EventArgs.Empty);
             system.ProcessStateChanged += System_ProcessStateChanged;
             system.ProcessCreated += System_ProcessCreated;
@@ -51,7 +53,8 @@ namespace OSExp
             }
 
             // move to next state
-            if (!stateMachine.MoveNext()) {
+            if (!stateMachine.MoveNext())
+            {
                 stateMachine = system.Run().GetEnumerator();
                 return;
             }
@@ -60,7 +63,7 @@ namespace OSExp
                 // reset state machine
                 stateMachine = system.Run().GetEnumerator();
             }
-            refreshList();      
+            refreshList();
         }
 
         private void System_ProcessStateChanged(object sender, ProcessStateEventArgs e)
@@ -81,6 +84,7 @@ namespace OSExp
 
         private void refreshList()
         {
+            var allMemory = 0;
             listView1.Items.Clear();
             foreach (var p in system.GetAllProcess())
             {
@@ -88,10 +92,14 @@ namespace OSExp
                 item.SubItems.Add(p.Priority.ToString());
                 item.SubItems.Add(p.LastRunTime.ToString());
                 item.SubItems.Add(p.State.ToString());
+                item.SubItems.Add(p.Memory.ToString());
                 listView1.Items.Add(item);
+                allMemory += p.MemorySize;
             }
             toolStripStatusLabel1.Text = $"Process Count: {system.ProcessCount}";
             toolStripStatusLabel2.Text = $"CPU Time: {system.Time}";
+            toolStripStatusLabel4.Text = $"Memory: {allMemory} B / {system.MaxMemory} B, {Math.Round(allMemory * 1.0 / system.MaxMemory * 100, 2)}%";
+            pictureBox1.Refresh();
         }
 
         private void Cpu_Interrupted(object sender, InterruptEventArgs e)
@@ -122,7 +130,7 @@ namespace OSExp
 
         private void button4_Click(object sender, EventArgs e)
         {
-            switch(comboBox1.SelectedItem.ToString())
+            switch (comboBox1.SelectedItem.ToString())
             {
                 case "Round-Robin":
                     system = new RRSystem();
@@ -160,6 +168,58 @@ namespace OSExp
                 system.SuspendProcess(select);
             }
 
+            refreshList();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count == 0)
+            {
+                return;
+            }
+            var select = listView1.SelectedItems[0].Text;
+            var findPro = system.GetAllProcess().Find(t => t.Name == select);
+            system.KillProcess(findPro.Name);
+            refreshList();
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            var beginHeight = 5;
+            var beginWidth = 30;
+            var width = 30;
+
+            var maxHeight = pictureBox1.Height - beginHeight * 2;
+            var maxMemory = system.MaxMemory;
+
+            float scale = maxHeight * 1.0f / maxMemory;
+
+            var font = new Font("Segoe UI", 9.5f);
+            e.Graphics.DrawRectangle(new Pen(Color.Red, 3), beginWidth, beginHeight, width, maxHeight);
+            e.Graphics.DrawString(system.MaxMemory.ToString(), font, Brushes.Red, beginWidth + width + 5, maxHeight - 20);
+            foreach (var p in system.GetAllProcess())
+            {
+                var size = p.Memory;
+                float length = size.Length * scale;
+                float beginPoint = size.Begin * scale + beginHeight;
+
+                var color = Color.FromArgb((int)(Math.Sqrt(Math.Sqrt(length / maxMemory * 100 * 10) * 10) / 100 * 255), Color.Black);
+                var brush = new SolidBrush(color);
+                e.Graphics.FillRectangle(brush, beginWidth - 2, beginPoint, width + 2, length);
+                e.Graphics.DrawRectangle(Pens.Black, beginWidth, beginPoint, width, length);
+                e.Graphics.DrawString(size.Begin.ToString() + " - " + p.Name, font, Brushes.Black, beginWidth + width + 5, beginPoint);
+            }
+
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            pictureBox1.Refresh();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            system.CompressMemory();
             refreshList();
         }
     }

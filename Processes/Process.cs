@@ -1,6 +1,7 @@
 ﻿using OSExp.ASM.Emulator;
 using OSExp.ASM.Language;
 using OSExp.Simulator;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace OSExp.Processes
@@ -20,10 +21,14 @@ namespace OSExp.Processes
 
         public CpuState CpuState { get; set; }
 
+        public MemoryAllocation Memory { get; set; }
+
         public ProcessEventArgs ToEventArgs() => new ProcessEventArgs()
         {
             Process = this
         };
+
+        public int MemorySize => Program.Select(t => t.Length).Aggregate(0, (sum, x) => sum + x);
 
         public override string ToString()
         {

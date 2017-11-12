@@ -9,11 +9,11 @@ namespace OSExp.ASM.Language
 {
     public static class Compiler
     {
-        public static byte[] Compile(List<SyntaxNode> program) => compress(serialize(program));
+        public static byte[] Compile(List<SyntaxNode> program) => Compress(serialize(program));
 
-        public static List<SyntaxNode> Decompile(byte[] program) => deserialize<List<SyntaxNode>>(decompress(program));
+        public static List<SyntaxNode> Decompile(byte[] program) => deserialize<List<SyntaxNode>>(Decompress(program));
 
-        private static byte[] compress(string text)
+        public static byte[] Compress(string text)
         {
             var buffer = Encoding.UTF8.GetBytes(text);
             var memoryStream = new MemoryStream();
@@ -33,7 +33,7 @@ namespace OSExp.ASM.Language
             return gZipBuffer;
         }
 
-        private static string decompress(byte[] gZipBuffer)
+        public static string Decompress(byte[] gZipBuffer)
         {
             using (var memoryStream = new MemoryStream())
             {

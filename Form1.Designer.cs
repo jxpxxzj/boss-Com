@@ -31,11 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.listView1 = new OSExp.ListViewDB();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -49,13 +44,24 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.button7 = new System.Windows.Forms.Button();
+            this.listView1 = new OSExp.ListViewDB();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(931, 813);
+            this.button1.Location = new System.Drawing.Point(1076, 813);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(153, 32);
             this.button1.TabIndex = 0;
@@ -72,44 +78,6 @@
             this.button2.Text = "Add";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // listView1
-            // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4});
-            this.listView1.FullRowSelect = true;
-            this.listView1.Location = new System.Drawing.Point(12, 57);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1072, 743);
-            this.listView1.TabIndex = 2;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 209;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Priority";
-            this.columnHeader2.Width = 261;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "Last Run Time";
-            this.columnHeader3.Width = 234;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "State";
-            this.columnHeader4.Width = 205;
             // 
             // button3
             // 
@@ -156,10 +124,11 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2,
+            this.toolStripStatusLabel4,
             this.toolStripStatusLabel3});
             this.statusStrip1.Location = new System.Drawing.Point(0, 857);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1096, 35);
+            this.statusStrip1.Size = new System.Drawing.Size(1606, 35);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -205,7 +174,7 @@
             this.comboBox1.Items.AddRange(new object[] {
             "Round-Robin",
             "First-Come, First-Served"});
-            this.comboBox1.Location = new System.Drawing.Point(817, 11);
+            this.comboBox1.Location = new System.Drawing.Point(962, 11);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(267, 32);
             this.comboBox1.TabIndex = 9;
@@ -213,7 +182,7 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(709, 10);
+            this.button4.Location = new System.Drawing.Point(854, 10);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(102, 32);
             this.button4.TabIndex = 10;
@@ -223,7 +192,8 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(317, 11);
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button5.Location = new System.Drawing.Point(677, 10);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(171, 32);
             this.button5.TabIndex = 11;
@@ -231,11 +201,95 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Location = new System.Drawing.Point(1235, 8);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(360, 833);
+            this.pictureBox1.TabIndex = 12;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(317, 11);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(59, 32);
+            this.button6.TabIndex = 13;
+            this.button6.Text = "Kill";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // toolStripStatusLabel4
+            // 
+            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(95, 30);
+            this.toolStripStatusLabel4.Text = "Memory:";
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(382, 11);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(199, 32);
+            this.button7.TabIndex = 14;
+            this.button7.Text = "Compress Memory";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // listView1
+            // 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader5});
+            this.listView1.FullRowSelect = true;
+            this.listView1.Location = new System.Drawing.Point(12, 57);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(1216, 743);
+            this.listView1.TabIndex = 2;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 209;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Priority";
+            this.columnHeader2.Width = 261;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Last Run Time";
+            this.columnHeader3.Width = 234;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "State";
+            this.columnHeader4.Width = 139;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Memory";
+            this.columnHeader5.Width = 264;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(168F, 168F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1096, 892);
+            this.ClientSize = new System.Drawing.Size(1606, 892);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.comboBox1);
@@ -250,8 +304,10 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Opearting System";
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -279,6 +335,11 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.Button button7;
     }
 }
 

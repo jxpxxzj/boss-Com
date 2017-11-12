@@ -93,6 +93,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ASM\Emulator\Cpu.cs" />
     <Compile Include="Simulator\FPFSystem.cs" />
+    <Compile Include="Simulator\MemoryAllocation.cs" />
+    <Compile Include="Simulator\MemoryAllocationType.cs" />
     <Compile Include="Simulator\ProcessEventArgs.cs" />
     <Compile Include="Simulator\ProcessConflictException.cs" />
     <Compile Include="Simulator\ProcessNotExistException.cs" />

@@ -15,6 +15,12 @@ namespace OSExp.ASM.Language
         public List<SyntaxNode> Children { get; set; } = new List<SyntaxNode>();
 
         private object inner_value = null;
+
+        public int Length
+        {
+            get =>
+                Compiler.Compress(ToString()).Length;    
+        }
         public object Value
         {
             get => inner_value;
