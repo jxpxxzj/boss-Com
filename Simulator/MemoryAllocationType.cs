@@ -3,6 +3,7 @@
     public enum MemoryAllocationType
     {
         Free,
-        Process
+        Process,
+        System
     }
 }

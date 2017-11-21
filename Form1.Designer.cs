@@ -38,6 +38,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -46,8 +47,8 @@
             this.button5 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button6 = new System.Windows.Forms.Button();
-            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.button7 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
             this.listView1 = new OSExp.ListViewDB();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -61,7 +62,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(1076, 813);
+            this.button1.Location = new System.Drawing.Point(1162, 813);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(153, 32);
             this.button1.TabIndex = 0;
@@ -128,7 +129,7 @@
             this.toolStripStatusLabel3});
             this.statusStrip1.Location = new System.Drawing.Point(0, 857);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1606, 35);
+            this.statusStrip1.Size = new System.Drawing.Size(1692, 35);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -143,6 +144,12 @@
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
             this.toolStripStatusLabel2.Size = new System.Drawing.Size(108, 30);
             this.toolStripStatusLabel2.Text = "CPU Time:";
+            // 
+            // toolStripStatusLabel4
+            // 
+            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(95, 30);
+            this.toolStripStatusLabel4.Text = "Memory:";
             // 
             // toolStripStatusLabel3
             // 
@@ -174,7 +181,7 @@
             this.comboBox1.Items.AddRange(new object[] {
             "Round-Robin",
             "First-Come, First-Served"});
-            this.comboBox1.Location = new System.Drawing.Point(962, 11);
+            this.comboBox1.Location = new System.Drawing.Point(1048, 11);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(267, 32);
             this.comboBox1.TabIndex = 9;
@@ -182,7 +189,7 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(854, 10);
+            this.button4.Location = new System.Drawing.Point(940, 10);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(102, 32);
             this.button4.TabIndex = 10;
@@ -193,7 +200,7 @@
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(677, 10);
+            this.button5.Location = new System.Drawing.Point(763, 10);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(171, 32);
             this.button5.TabIndex = 11;
@@ -205,7 +212,7 @@
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Location = new System.Drawing.Point(1235, 8);
+            this.pictureBox1.Location = new System.Drawing.Point(1321, 8);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(360, 833);
             this.pictureBox1.TabIndex = 12;
@@ -222,12 +229,6 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // toolStripStatusLabel4
-            // 
-            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(95, 30);
-            this.toolStripStatusLabel4.Text = "Memory:";
-            // 
             // button7
             // 
             this.button7.Location = new System.Drawing.Point(382, 11);
@@ -237,6 +238,16 @@
             this.button7.Text = "Compress Memory";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(587, 11);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(153, 32);
+            this.button8.TabIndex = 15;
+            this.button8.Text = "Memory Table";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // listView1
             // 
@@ -252,7 +263,7 @@
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(12, 57);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1216, 743);
+            this.listView1.Size = new System.Drawing.Size(1302, 743);
             this.listView1.TabIndex = 2;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -286,7 +297,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(168F, 168F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1606, 892);
+            this.ClientSize = new System.Drawing.Size(1692, 892);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.pictureBox1);
@@ -340,6 +352,7 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
     }
 }
 

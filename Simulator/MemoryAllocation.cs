@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OSExp.Processes;
+using System;
 
 namespace OSExp.Simulator
 {
@@ -7,12 +8,21 @@ namespace OSExp.Simulator
         public int Begin { get; protected set; }
         public int End { get; protected set; }
         public MemoryAllocationType Type { get; protected set; }
+        public Process Process { get; protected set; }
 
         public MemoryAllocation(int begin, int end, MemoryAllocationType type)
         {
             Begin = begin;
             End = end;
             Type = type;
+        }
+
+        public MemoryAllocation(int begin, int end, Process process)
+        {
+            Begin = begin;
+            End = end;
+            Type = MemoryAllocationType.Process;
+            Process = process;
         }
 
         public int Length => End - Begin + 1;

@@ -16,6 +16,7 @@ namespace OSExp.Simulator
 
         public virtual int ChannelCount { get; set; } = 16;
         public int MaxMemory { get; set; } = 2048;
+        public virtual int SystemSize { get; set; } = 300;
 
         public int ProcessCount => ProcessList.Count + SuspendedList.Count;
         public List<Process> GetAllProcess() => new List<Process>(ProcessList.Concat(SuspendedList));
@@ -32,6 +33,34 @@ namespace OSExp.Simulator
         public event EventHandler<InterruptEventArgs> Interrupted;
 
         public bool CanRun => ProcessList.Where(p => p.State == State.Ready || p.State == State.Running || p.State == State.Created).FirstOrDefault() != null;
+        public List<MemoryAllocation> MemoryTable
+        {
+            get
+            {
+                var list = new List<MemoryAllocation>();
+                list.Add(new MemoryAllocation(0, SystemSize - 1, MemoryAllocationType.System));
+                var posPointer = SystemSize;
+                var processAllocated = GetAllProcess().Where(t => t.Memory != null).ToList().OrderBy(t => t.Memory.Begin);
+                foreach (var p in processAllocated)
+                {
+                    if (p.Memory.Begin > posPointer)
+                    {
+                        list.Add(new MemoryAllocation(posPointer, p.Memory.Begin - 1, MemoryAllocationType.Free));
+                        posPointer = p.Memory.Begin;
+                    }
+                    if (p.Memory.Begin == posPointer)
+                    {
+                        list.Add(new MemoryAllocation(p.Memory.Begin, p.Memory.End, p));
+                        posPointer = p.Memory.End + 1;
+                    }
+                }
+                if (posPointer != MaxMemory - 1)
+                {
+                    list.Add(new MemoryAllocation(posPointer, MaxMemory - 1, MemoryAllocationType.Free));
+                }
+                return list;
+            }
+        }
 
         public System()
         {
@@ -337,7 +366,7 @@ namespace OSExp.Simulator
 
         public void CompressMemory()
         {
-            var posPointer = 0;
+            var posPointer = SystemSize;
             var processAllocated = GetAllProcess().Where(t => t.Memory != null).Select(t => t.Memory).ToList().OrderBy(t => t.Begin);
             foreach (var p in processAllocated)
             {
@@ -354,7 +383,7 @@ namespace OSExp.Simulator
 
         protected virtual (int, int) FindHole(int expectedSize)
         {
-            var posPointer = 0;
+            var posPointer = SystemSize;
             var processAllocated = GetAllProcess().Where(t => t.Memory != null).Select(t => t.Memory).ToList().OrderBy(t => t.Begin);
             foreach (var p in processAllocated)
             {

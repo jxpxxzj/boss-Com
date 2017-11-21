@@ -100,6 +100,7 @@ namespace OSExp
             toolStripStatusLabel2.Text = $"CPU Time: {system.Time}";
             toolStripStatusLabel4.Text = $"Memory: {allMemory} B / {system.MaxMemory} B, {Math.Round(allMemory * 1.0 / system.MaxMemory * 100, 2)}%";
             pictureBox1.Refresh();
+            tableDialogInstance.RefreshList(system.MemoryTable);
         }
 
         private void Cpu_Interrupted(object sender, InterruptEventArgs e)
@@ -195,8 +196,13 @@ namespace OSExp
             float scale = maxHeight * 1.0f / maxMemory;
 
             var font = new Font("Segoe UI", 9.5f);
+
             e.Graphics.DrawRectangle(new Pen(Color.Red, 3), beginWidth, beginHeight, width, maxHeight);
             e.Graphics.DrawString(system.MaxMemory.ToString(), font, Brushes.Red, beginWidth + width + 5, maxHeight - 20);
+
+            e.Graphics.DrawString("System Occupied", font, Brushes.Orange, beginWidth + width + 5, 0);
+            e.Graphics.FillRectangle(Brushes.Orange, beginWidth, beginHeight, width, system.SystemSize * scale);
+            e.Graphics.DrawRectangle(Pens.Black, beginWidth, beginHeight, width, system.SystemSize * scale);
             foreach (var p in system.GetAllProcess())
             {
                 var size = p.Memory;
@@ -221,6 +227,13 @@ namespace OSExp
         {
             system.CompressMemory();
             refreshList();
+        }
+
+        MemoryTable tableDialogInstance = new MemoryTable();
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            tableDialogInstance.Show();
         }
     }
 }
