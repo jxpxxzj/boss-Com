@@ -617,7 +617,7 @@ namespace OSExp.ASM.Emulator
             else // return from proc
             {
                 var line = ProcStackTrace.Pop();
-                registerFrame.ip = line - 1;
+                registerFrame.ip = line;
             }
         }
 

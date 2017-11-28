@@ -19,12 +19,6 @@ namespace OSExp
             comboBox1.SelectedItem = "Round-Robin";
             DoubleBuffered = true;
             button4_Click(this, EventArgs.Empty);
-            system.ProcessStateChanged += System_ProcessStateChanged;
-            system.ProcessCreated += System_ProcessCreated;
-            system.ProcessRunned += System_ProcessRunned;
-            system.ProcessKilled += System_ProcessKilled;
-            system.Interrupted += Cpu_Interrupted;
-            stateMachine = system.Run().GetEnumerator();
         }
 
         private void System_ProcessKilled(object sender, ProcessEventArgs e)
@@ -107,7 +101,15 @@ namespace OSExp
         {
             if (e.Code == 0x21)
             {
-                Console.WriteLine(e.State.RegisterFrame.ToString());
+                switch(e.State.RegisterFrame.ax)
+                {
+                    case 0x4c00:
+                        system.Cpu.Ret();
+                        break;
+                    case 0x2:
+                        Console.Write((char)e.State.RegisterFrame.dx);
+                        break;
+                }
             }
         }
 
@@ -141,6 +143,12 @@ namespace OSExp
                     break;
             }
             timer1.Stop();
+            system.ProcessStateChanged += System_ProcessStateChanged;
+            system.ProcessCreated += System_ProcessCreated;
+            system.ProcessRunned += System_ProcessRunned;
+            system.ProcessKilled += System_ProcessKilled;
+            system.Interrupted += Cpu_Interrupted;
+            stateMachine = system.Run().GetEnumerator();
             toolStripStatusLabel3.Text = $"Algorithm: {comboBox1.SelectedItem.ToString()}";
             refreshList();
         }

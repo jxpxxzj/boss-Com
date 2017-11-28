@@ -109,7 +109,7 @@ namespace OSExp.ASM.Language
                         }
 
                         // label
-                        if ((Ops)node.Value == Ops.Loop || (Ops)node.Value == Ops.Call || (Ops)node.Value == Ops.Mov)
+                        if ((Ops)node.Value == Ops.Loop || (Ops)node.Value == Ops.Call || (Ops)node.Value == Ops.Jmp || (Ops)node.Value == Ops.Mov || (Ops)node.Value == Ops.Je || (Ops)node.Value == Ops.Jne || (Ops)node.Value == Ops.Ja || (Ops)node.Value == Ops.Jna || (Ops)node.Value == Ops.Jb || (Ops)node.Value == Ops.Jnb)
                         {
                             var labNode = new SyntaxNode()
                             {

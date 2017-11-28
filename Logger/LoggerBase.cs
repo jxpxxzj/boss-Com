@@ -13,7 +13,7 @@ namespace OSExp.Logger
 
         protected void Log(LogLevel level, string msg)
         {
-            if (LogManager.Level <= level)
+            if (LogManager.Level >= level)
             {
                 WriteLog(level, msg);
             }

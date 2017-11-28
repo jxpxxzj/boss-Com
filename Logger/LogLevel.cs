@@ -3,9 +3,11 @@
     public enum LogLevel
     {
         Disable,
+        Trace,
         Debug,
-        Info,
+        Info,   
         Warn,
-        Error
+        Error,
+        Fatal
     }
 }
